@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Logistics Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      color: white;
+      border: none;
+      margin-top: 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Place Your Logistics Order</h2>
+    <form id="logisticsForm">
+      <label for="pickup">Pickup Address</label>
+      <input type="text" id="pickup" required>
+
+      <label for="drop">Drop Address</label>
+      <input type="text" id="drop" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required>
+
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required>
+
+      <label for="userType">What describes you best?</label>
+      <select id="userType" required>
+        <option value="">--Select--</option>
+        <option value="Business User">Business User</option>
+        <option value="Personal User">Personal User</option>
+      </select>
+
+      <label for="vehicle">Select Vehicle</label>
+      <select id="vehicle" required>
+        <option value="">--Select Vehicle--</option>
+        <option value="Tata Ace Closed (750 kg) ₹455 - ₹485">Tata Ace Closed (750 kg) ₹455 - ₹485</option>
+        <option value="Tata Ace Open (750 kg) ₹415 - ₹445">Tata Ace Open (750 kg) ₹415 - ₹445</option>
+        <option value="Three-Wheeler (500 kg) ₹340 - ₹370">Three-Wheeler (500 kg) ₹340 - ₹370</option>
+        <option value="Mini 3W (50 kg) ₹160 - ₹190">Mini 3W (50 kg) ₹160 - ₹190</option>
+        <option value="Tata 407 (2500 kg) ₹1230 - ₹1260">Tata 407 (2500 kg) ₹1230 - ₹1260</option>
+        <option value="Pickup 8ft (1200 kg) ₹520 - ₹550">Pickup 8ft (1200 kg) ₹520 - ₹550</option>
+        <option value="Pickup 1.7Ton (1700 kg) ₹835 - ₹865">Pickup 1.7Ton (1700 kg) ₹835 - ₹865</option>
+        <option value="Tata 17ft (4500 kg) ₹2395 - ₹2425">Tata 17ft (4500 kg) ₹2395 - ₹2425</option>
+      </select>
+
+      <button type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("logisticsForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const pickup = document.getElementById("pickup").value;
+      const drop = document.getElementById("drop").value;
+      const phone = document.getElementById("phone").value;
+      const name = document.getElementById("name").value;
+      const userType = document.getElementById("userType").value;
+      const vehicle = document.getElementById("vehicle").value;
+
+      const message = `
+🚚 *New Logistics Order Received*
+👤 *Name*: ${name}
+📞 *Phone*: ${phone}
+🏠 *Pickup*: ${pickup}
+🏁 *Drop*: ${drop}
+👤 *User Type*: ${userType}
+🚛 *Vehicle*: ${vehicle}
+`;
+
+      const botToken = "7858650073:AAGOwwuawXY-KYhulilGNuBywqV70VzWtyM";
+      const chatId = "6149158092";
+
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "Markdown"
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert("Order placed successfully!");
+        document.getElementById("logisticsForm").reset();
+      })
+      .catch(err => {
+        alert("Failed to send order. Please try again.");
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
